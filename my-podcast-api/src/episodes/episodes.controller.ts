@@ -15,7 +15,8 @@ export class EpisodesController {
 
   @Get(':id')
   findOne(@Param() id: string) {
-    return `Find ${id}`;
+    console.log(id);
+    return `Find One`;
   }
 
   @Post()
