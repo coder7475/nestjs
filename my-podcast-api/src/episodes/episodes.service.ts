@@ -7,16 +7,16 @@ import { Episode } from './entity/episode.entity';
 export class EpisodesService {
   private episodes: Episode[] = [];
 
-  findAll(sort: 'asc' | 'desc' = 'asc') {
+  findAll(sort: 'asc' | 'desc' = 'asc', limit: number = 10): Episode[] {
     const sortAsc = (a: Episode, b: Episode) => (a.name < b.name ? -1 : 1);
     const sortDesc = (a: Episode, b: Episode) => (a.name > b.name ? -1 : 1);
 
-    return sort === 'asc'
-      ? this.episodes.sort(sortAsc)
-      : this.episodes.sort(sortDesc);
+    const sorted = [...this.episodes].sort(sort === 'asc' ? sortAsc : sortDesc);
+
+    return sorted.slice(0, limit);
   }
 
-  findOne(id: string) {
+  findOne(id: string): Episode {
     const episode = this.episodes.find((episode) => episode.id === id);
     if (!episode) {
       throw new HttpException('Episode not found', 404);
@@ -24,13 +24,13 @@ export class EpisodesService {
     return episode;
   }
 
-  findFeatured() {
+  findFeatured(): Episode[] {
     return this.episodes.filter((episode) => episode.featured);
   }
 
-  createEpisode(CreateEpisodeDto: CreateEpisodeDto) {
-    const newEpidsode = { ...CreateEpisodeDto, id: randomUUID() };
-    this.episodes.push(newEpidsode);
-    return newEpidsode;
+  createEpisode(createEpisodeDto: CreateEpisodeDto): Episode {
+    const newEpisode: Episode = { ...createEpisodeDto, id: randomUUID() };
+    this.episodes.push(newEpisode);
+    return newEpisode;
   }
 }
