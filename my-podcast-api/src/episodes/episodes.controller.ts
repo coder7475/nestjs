@@ -1,10 +1,15 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { Episode } from './entity/episode.entity';
+import { ConfigService } from 'src/config/config.service';
 
 @Controller('episodes')
 export class EpisodesController {
-  constructor(private episodeService: EpisodesService) {}
+  // Inject EpisodesService and ConfigService
+  constructor(
+    private episodeService: EpisodesService,
+    private configService: ConfigService,
+  ) {}
 
   @Get()
   findAll(@Query('sort') sort: 'asc' | 'desc' = 'desc') {
