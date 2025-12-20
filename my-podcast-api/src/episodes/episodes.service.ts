@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Episode } from './entity/episode.entity';
 
 @Injectable()
@@ -18,6 +18,9 @@ export class EpisodesService {
 
   findOne(id: string) {
     const episode = this.episodes.find((episode) => episode.id === id);
+    if (!episode) {
+      throw new HttpException('Episode not found', 404);
+    }
     return episode;
   }
 
