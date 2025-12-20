@@ -30,22 +30,44 @@ describe('EpisodesController', () => {
   });
 
   describe('findAll', () => {
-    const mockResult = [{ id: 'id' }];
+    describe('when episodes are found', () => {
+      const mockResult = [{ id: 'id' }];
 
-    beforeEach(() => {
-      jest
-        .spyOn(mockEpisodesService, 'findAll')
-        .mockResolvedValueOnce(mockResult);
+      beforeEach(() => {
+        jest
+          .spyOn(mockEpisodesService, 'findAll')
+          .mockResolvedValueOnce(mockResult);
+      });
+
+      it('should return an array of episodes', async () => {
+        const episodes = await controller.findAll();
+        expect(episodes).toEqual(mockResult);
+      });
+
+      it('should call EpisodesService.findAll', async () => {
+        await controller.findAll();
+        expect(mockEpisodesService.findAll).toHaveBeenCalled();
+      });
     });
 
-    it('should return an array of episodes', async () => {
-      const episodes = await controller.findAll();
-      expect(episodes).toEqual(mockResult);
-    });
+    describe('when episodes are not found', () => {
+      const mockResult = [];
 
-    it('should call EpisodesService.findAll', async () => {
-      await controller.findAll();
-      expect(mockEpisodesService.findAll).toHaveBeenCalled();
+      beforeEach(() => {
+        jest
+          .spyOn(mockEpisodesService, 'findAll')
+          .mockResolvedValueOnce(mockResult);
+      });
+
+      it('should return an empty array', async () => {
+        const episodes = await controller.findAll();
+        expect(episodes).toEqual(mockResult);
+      });
+
+      it('should call EpisodesService.findAll', async () => {
+        await controller.findAll();
+        expect(mockEpisodesService.findAll).toHaveBeenCalled();
+      });
     });
   });
 });
